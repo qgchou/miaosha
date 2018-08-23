@@ -17,6 +17,6 @@ public class WebConfig  extends WebMvcConfigurerAdapter{
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(userArgumentResolver);
 	}
-	
-	
+
+
 }

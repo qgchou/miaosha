@@ -37,4 +37,8 @@ path设为'/bb'则改cookie被所有'localhost:8080/test/bb'路径下的web页�
 
 # JSR 303 数据校验
 [JSR 303 - Bean Validation 介绍及最佳实践](https://www.ibm.com/developerworks/cn/java/j-lo-jsr303/index.html)
+[Spring Boot 进行Bean Validate和Method Validate](https://blog.csdn.net/baidu_35776955/article/details/79551459)
 
+
+# 其他
+[一张图搞定OAuth2.0](https://www.cnblogs.com/flashsun/p/7424071.html)
