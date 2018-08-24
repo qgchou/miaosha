@@ -14,7 +14,7 @@ public class MiaoshaService {
 	GoodsService goodsService;
 	
 	@Autowired
-    OrderService orderService;
+	OrderService orderService;
 
 	@Transactional
 	public OrderInfo miaosha(MiaoshaUser user, GoodsVo goods) {

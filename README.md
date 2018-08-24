@@ -60,10 +60,68 @@ QPS:服务器每秒处理完多少个请求
 [QPS 和并发：如何衡量服务器端性能](https://blog.csdn.net/leyangjun/article/details/64131491)  
 linux 的top 监控服务器资源内存cpu等  
 
+# 页面级优化
+redis缓存、静态化分离  
+高并发瓶颈在数据库，可用缓存解决。  
+用户发起请求，先通过页面静态化，从浏览器获取页面缓存。部署cdn节点，让请求首先访问cdn节点，页面缓存，对象缓存，最后数据库。一步一步通过缓存，削减到数据库的请求量。通过缓存可能会引起数据不一致，只能尽量平衡，在满足数据一致的前提下进行缓存。  
+cdn：内容分发网络，将数据缓存到各个节点上，有请求将请求重新导向到最近的服务节点。  
+## 页面缓存
+商品列表和商品详情页  
+  
+将模板手动渲染成html后存进redis中  
+1. 每次请求都先判断缓存中是否有该页面
+2. 有就直接返回
+3. 没有的话手动渲染后存进缓存中
+4. 一般缓存过期时间不能设置太长，以防数据更新不及时
+
+ThymeleafViewResolver 视图解析器获得视图引擎后来渲染模板 
+@RequestMapping(value="/to_list", produces="text/html") [produces属性含义](https://blog.csdn.net/lzwglory/article/details/17252099)    
+表示方法将生产html格式的数据，此时根据请求头中的Accept进行匹配，如请求头“Accept:text/html”时即可匹配。    
+@ResponseBody 一般是返回json时使用，但它的确切含义是将返回的对象写进响应的body中，
+在使用此注解之后不会再试图走处理器，而是直接将数据写入到输入流中，他的效果等同于通过response对象输出指定格式的数据。  
+@RequestMapping(value="/to_detail2/{goodsId}",produces="text/html")  这类url同样可以缓存页面，不过key需要对应goodsId  
+
+## 对象缓存  
+缓存秒杀订单对象，不设过期时间    
+同样用redis缓存，下单创建订单后缓存。秒杀判断有无重复秒杀时拿的是缓存里的不是从数据库拿，这样降低了数据库的压力。  
+  
+如果有更新是需要先更新数据库再让缓存失效。反过来不行。  
+https://blog.csdn.net/lc0817/article/details/52089473
+> 假设有两个并发操作，一个是更新操作，另一个是查询操作，更新操作删除缓存后，查询操作没有命中缓存，先把老数据读出来后放到缓存中，然后更新操作更新了数据库。于是，在缓存中的数据还是老的数据，导致缓存中的数据是脏的，而且还一直这样脏下去了。  
+  
+更新时新new一个bean，更新哪个字段加哪个  ？
+
+## 页面静态化
+页面静态化，AngularJS，vue.js  
+在浏览器缓存，springboot需要配置对静态文件的处理。  
+没有配会想服务器发起一次请求，服务器收到请求确定页面没有改变就返回304让浏览器使用缓存。  
+Cache-Control：浏览器缓存该资源多长时间  
+  
+响应码304：服务端收到参数检查页面有没有变化，没有变化返回304，客户端可直接用浏览器缓存。
+
+这样只有json跟服务器交互了，提高了响应速度？
+
+Pragma  
+Expire  
+Cache-Control  
+## 卖超问题
+```update miaosha_goods set stock_count = stock_count - 1 where goods_id = #{goodsId} and stock_count > 0```  
+数据库会自动加锁确保只有一个线程执行该sql，保证商品不卖超 ?没有更新0条就回滚事务的逻辑啊
+  
+一个用户同时发两个请求，会都通过是否已秒杀到商品的校验，所以会秒杀到两个商品。  
+通过数据库解决，在秒杀订单表指定字段加上唯一索引防止重复购买。  
+## 静态资源优化
+js/css压缩（去空格等），减少流量。库一般都有提供压缩版的文件。  
+多个js/css组合，减少连接数，三次握手，多个连接会导致刚开网页时很慢  
+Tengine  
+webpack 打包  
+   
 # 其他
 [一张图搞定OAuth2.0](https://www.cnblogs.com/flashsun/p/7424071.html)
 [springboot(十四)：springboot整合shiro-登录认证和权](https://yq.aliyun.com/articles/385516)  
 [HTTP幂等性及GET、POST、PUT、DELETE的区别](https://blog.csdn.net/zjkc050818/article/details/78799386)
+get post 传参的大小是浏览器厂商实现时自己限制的，http协议并没有规定参数大小。他们的主要区别是幂等性。幂等性属于语义范畴？  
+
 1. 幂等性，n次请求和1次请求产生的副作用相同，get没有副作用，delete调用多次都是删除同一个资源，put是创建或更新同一uri
 2. 一般显式的id不用自增长，因为很有可能会被遍历出来所有信息，snowflake算法？
 3. com.alibaba.fastjson java类和json的互转

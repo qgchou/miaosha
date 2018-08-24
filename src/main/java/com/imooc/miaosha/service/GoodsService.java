@@ -12,7 +12,7 @@ import java.util.List;
 public class GoodsService {
 	
 	@Autowired
-	GoodsDao goodsDao;
+    GoodsDao goodsDao;
 	
 	public List<GoodsVo> listGoodsVo(){
 		return goodsDao.listGoodsVo();
