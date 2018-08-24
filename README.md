@@ -92,8 +92,8 @@ https://blog.csdn.net/lc0817/article/details/52089473
 更新时新new一个bean，更新哪个字段加哪个  ？
 
 ## 页面静态化
-页面静态化，AngularJS，vue.js  
-在浏览器缓存，springboot需要配置对静态文件的处理。  
+页面静态化，AngularJS，vue.js，html+ajax  
+在浏览器缓存静态页面，springboot需要配置对静态文件的处理。  
 没有配会想服务器发起一次请求，服务器收到请求确定页面没有改变就返回304让浏览器使用缓存。  
 Cache-Control：浏览器缓存该资源多长时间  
   
