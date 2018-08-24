@@ -51,7 +51,11 @@ getTime() 毫秒
 3. 事务，减库存、生成订单、写入秒杀订单
 
 一般在service中不直接调用其他功能的dao而是要调用service，因为有可能在对应的service做了缓存或者其他操作。
-# jmeter 压测
+# jmeter 压测 
+5000个用户每秒发10个请求 ？
+qps：
+秒杀 1306
+商品列表 1267
 redis压测工具，redis-benchmark  
 [springboot 打war包](https://blog.csdn.net/qq_28988969/article/details/78135768)  
 [聊聊QPS/TPS/并发量/系统吞吐量的概念](https://blog.csdn.net/cainiao_user/article/details/77146049)
