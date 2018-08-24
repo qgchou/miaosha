@@ -58,12 +58,8 @@ redis压测工具，redis-benchmark
 QPS:服务器每秒处理完多少个请求  
 吞吐量（QPS）= 并发量/平均响应时间  
 [QPS 和并发：如何衡量服务器端性能](https://blog.csdn.net/leyangjun/article/details/64131491)  
+linux 的top 监控服务器资源内存cpu等  
 
-
-
-linux 的top 监控服务器资源内存cpu等
-tps：
-token安全性 https://blog.csdn.net/qq_35246620/article/details/55049812
 # 其他
 [一张图搞定OAuth2.0](https://www.cnblogs.com/flashsun/p/7424071.html)
 [springboot(十四)：springboot整合shiro-登录认证和权](https://yq.aliyun.com/articles/385516)  
