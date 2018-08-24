@@ -1,10 +1,8 @@
 package com.imooc.miaosha.redis;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.alibaba.fastjson.JSON;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -17,7 +15,7 @@ public class RedisService {
 	/**
 	 * 获取当个对象
 	 * */
-	public <T> T get(KeyPrefix prefix, String key,  Class<T> clazz) {
+	public <T> T get(KeyPrefix prefix, String key, Class<T> clazz) {
 		 Jedis jedis = null;
 		 try {
 			 jedis =  jedisPool.getResource();
@@ -34,7 +32,7 @@ public class RedisService {
 	/**
 	 * 设置对象
 	 * */
-	public <T> boolean set(KeyPrefix prefix, String key,  T value) {
+	public <T> boolean set(KeyPrefix prefix, String key, T value) {
 		 Jedis jedis = null;
 		 try {
 			 jedis =  jedisPool.getResource();

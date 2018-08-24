@@ -3,7 +3,6 @@ package com.imooc.miaosha.redis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -11,7 +10,7 @@ import redis.clients.jedis.JedisPoolConfig;
 public class RedisPoolFactory {
 
 	@Autowired
-	RedisConfig redisConfig;
+    RedisConfig redisConfig;
 	
 	@Bean
 	public JedisPool JedisPoolFactory() {

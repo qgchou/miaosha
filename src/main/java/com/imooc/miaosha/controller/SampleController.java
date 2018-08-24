@@ -1,27 +1,26 @@
 package com.imooc.miaosha.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.imooc.miaosha.domain.User;
 import com.imooc.miaosha.redis.RedisService;
 import com.imooc.miaosha.redis.UserKey;
 import com.imooc.miaosha.result.CodeMsg;
 import com.imooc.miaosha.result.Result;
 import com.imooc.miaosha.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/demo")
 public class SampleController {
 
 	@Autowired
-	UserService userService;
+    UserService userService;
 	
 	@Autowired
-	RedisService redisService;
+    RedisService redisService;
 	
     @RequestMapping("/hello")
     @ResponseBody
@@ -59,7 +58,7 @@ public class SampleController {
     @RequestMapping("/redis/get")
     @ResponseBody
     public Result<User> redisGet() {
-    	User  user  = redisService.get(UserKey.getById, ""+1, User.class);
+    	User user  = redisService.get(UserKey.getById, ""+1, User.class);
         return Result.success(user);
     }
     
