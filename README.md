@@ -1,10 +1,10 @@
-# 分布式session  
+## 分布式session  
 为什么需要分布式session
 因为可能不只一台服务器，有多台服务器提供秒杀功能，用户登上A，session就记录在A上，
 但如果再次访问被分流到另一台服务器B上，在B中并没有该用户的session，用户通过所持有的sessionid在B中找不到对应的session。
 所以为了解决这个问题，需要同步session，主流web容器一般都有提供同步的功能（？）但是同步session性能太差。  
 一般是用一个登录令牌token从数据库拿到登录信息，以此识别用户是否已登录。
-## 实现  
+### 实现  
 登录验证成功后生成一个uuid作为token，将它当做key把用户信息存在redis中，然后将这个token放在cookie中返回给客户端。  
 客户端请求时就会附带上这个cookie。  
 然后在请求进入controller前先处理一下请求，从url参数或者request头中取出cookie中的token。  
@@ -119,7 +119,30 @@ js/css压缩（去空格等），减少流量。库一般都有提供压缩版�
 多个js/css组合，减少连接数，三次握手，多个连接会导致刚开网页时很慢  
 Tengine  
 webpack 打包  
-   
+# 服务级优化
+## 接口优化
+redis 预减库存，为了减少数据库访问  
+rabbitmq 消息队列，异步处理秒杀请求  
+系统初始化时就要把库存加载到redis中，收到请求，redis预减库存，库存不足，直接返回。  
+这样就不用每次有秒杀请求都要先去数据库检查是否有库存。  
+如果库存充足则将请求放入队列中，并立即返回排队中，提高用户体验。这时客户端需要轮询看秒杀是否成功。  
+然后请求出队，生成订单并减少库存。  
+实现initializingBean接口的初始化方法来把库存加载到redis中，bean的生命周期  
+缓存判断是否有库存的结果以供客户端轮询结果。结果有无库存，排队中，秒杀成功。  
+用内存标记减少redis访问，设一个map记录是否有库存。  
+
+  
+### rabbitmq
+简单的使用：添加依赖amqp，创建消息接收者和发送者。  
+guest默认不能远程连接  
+消息先发送到交换机上，然后交换机发送到queue上。  
+交换机模式  
+1. direct 
+2. topic 绑定交换机和队列，通过key识别不同队列，key可用通配符
+3. fanout 广播，也可以发送给多个队列，但是没有key的限制
+4. header 灵活选择队列和key，通过头部信息匹配queue
+阿里的消息中间件rocketmq
+swagger
 # 其他
 [一张图搞定OAuth2.0](https://www.cnblogs.com/flashsun/p/7424071.html)
 [springboot(十四)：springboot整合shiro-登录认证和权](https://yq.aliyun.com/articles/385516)  
