@@ -157,6 +157,20 @@ swagger
 ？  
 集成到linux内核中了  
 千万亿级 架构  
+
+# 安全优化
+### 秒杀接口地址隐藏
+防止有人直接刷秒杀接口  
+用户调用一个接口拿到特有的秒杀路径，存redis  
+验证路径
+### 验证码
+防机器人  
+分散并发量  
+ScriptEngine
+### 限流防刷
+限制每分钟访问次数  
+接口限流，用缓存记录访问次数并设置有效期  
+通用的限流功能，用拦截器和注解，不用在每个接口方法中都写同样的代码    
 # 其他
 [一张图搞定OAuth2.0](https://www.cnblogs.com/flashsun/p/7424071.html)
 [springboot(十四)：springboot整合shiro-登录认证和权](https://yq.aliyun.com/articles/385516)  
