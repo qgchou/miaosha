@@ -6,7 +6,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.imooc.miaosha.redis.RedisService;
+import com.yangj.miaosha.redis.RedisService;
 
 @Service
 public class MQSender {
