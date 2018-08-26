@@ -143,6 +143,13 @@ guest默认不能远程连接
 4. header 灵活选择队列和key，通过头部信息匹配queue
 阿里的消息中间件rocketmq
 swagger
+### nginx
+反向代理到服务器集群中  
+也可缓存  
+### LVS
+？  
+集成到linux内核中了  
+千万亿级 架构  
 # 其他
 [一张图搞定OAuth2.0](https://www.cnblogs.com/flashsun/p/7424071.html)
 [springboot(十四)：springboot整合shiro-登录认证和权](https://yq.aliyun.com/articles/385516)  
