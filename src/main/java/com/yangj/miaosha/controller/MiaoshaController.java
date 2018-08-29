@@ -109,6 +109,7 @@ public class MiaoshaController implements InitializingBean {
 		//判断是否已经秒杀到了
 		MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
 		if(order != null) {
+			//incr
 			return Result.error(CodeMsg.REPEATE_MIAOSHA);
 		}
 		//入队

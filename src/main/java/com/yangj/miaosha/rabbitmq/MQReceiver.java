@@ -47,6 +47,7 @@ public class MQReceiver {
 	    	//判断是否已经秒杀到了
 	    	MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
 	    	if(order != null) {
+	    		//incr?
 	    		return;
 	    	}
 	    	//减库存 下订单 写入秒杀订单
