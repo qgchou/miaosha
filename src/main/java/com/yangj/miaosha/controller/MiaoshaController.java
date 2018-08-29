@@ -99,6 +99,7 @@ public class MiaoshaController implements InitializingBean {
 		if(over) {
 			return Result.error(CodeMsg.MIAO_SHA_OVER);
 		}
+		//TODO 感觉这里有逻辑问题啊，没有看到更新redis库存的
 		//预减库存
 		long stock = redisService.decr(GoodsKey.getMiaoshaGoodsStock, ""+goodsId);//10
 		if(stock < 0) {

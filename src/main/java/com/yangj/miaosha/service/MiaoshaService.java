@@ -30,7 +30,7 @@ public class MiaoshaService {
 		boolean success = goodsService.reduceStock(goods);
 		if(success) {
 			//order_info maiosha_order
-			return orderService.createOrder(user, goods);
+			return orderService.createOrder(user, goods);//TODO 不是还需要减掉redis里的库存吗
 		}else {
 			setGoodsOver(goods.getId());
 			return null;
