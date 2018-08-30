@@ -44,26 +44,26 @@ path设为'/bb'则改cookie被所有'localhost:8080/test/bb'路径下的web页�
 
 ### domain
 
-# md5
+## md5
 两次加密，客户端加密，http是明文传输的，然后服务端加密一次，防止数据库信息泄露时别人根据客户端的salt反推出密码。  
 
-# JSR 303 数据校验
+## JSR 303 数据校验
 [JSR 303 - Bean Validation 介绍及最佳实践](https://www.ibm.com/developerworks/cn/java/j-lo-jsr303/index.html)  
 [Spring Boot 进行Bean Validate和Method Validate](https://blog.csdn.net/baidu_35776955/article/details/79551459)  
 全局异常处理，@Valid校验 抛BindException  
 
-# 秒杀实现
-## 商品详情
+## 秒杀实现
+### 商品详情
 java.util.Date 
 getTime() 毫秒
 用goodsid拿出商品信息，判断是否已经开始秒杀，设置秒杀状态和倒计时时间，开始秒杀倒计时为0，结束为-1。  
-## 秒杀
+### 秒杀
 1. 判断库存：先根据商品id拿到商品信息，来判断库存，没库存了返回已秒杀完毕。  
 2. 是否重复秒杀：有库存根据userid和goodsid从秒杀订单表里取数据，判断是否已经下了单秒杀过这个商品了，已下单返回不能重复秒杀。  
 3. 事务，减库存、生成订单、写入秒杀订单
 
 一般在service中不直接调用其他功能的dao而是要调用service，因为有可能在对应的service做了缓存或者其他操作。
-# jmeter 压测 
+## jmeter 压测 
 5000个线程
 qps：
 秒杀 1306
@@ -76,12 +76,12 @@ QPS:服务器每秒处理完多少个请求
 [QPS 和并发：如何衡量服务器端性能](https://blog.csdn.net/leyangjun/article/details/64131491)  
 linux 的top 监控服务器资源内存cpu等  
 
-# 页面级优化
+## 页面级优化
 redis缓存、静态化分离  
 高并发瓶颈在数据库，可用缓存解决。  
 用户发起请求，先通过页面静态化，从浏览器获取页面缓存。部署cdn节点，让请求首先访问cdn节点，页面缓存，对象缓存，最后数据库。一步一步通过缓存，削减到数据库的请求量。通过缓存可能会引起数据不一致，只能尽量平衡，在满足数据一致的前提下进行缓存。  
 cdn：内容分发网络，将数据缓存到各个节点上，有请求将请求重新导向到最近的服务节点。  
-## 页面缓存
+### 页面缓存
 商品列表和商品详情页 qps提高100%，mysql负载降低60%  
   
 将模板手动渲染成html后存进redis中  
@@ -97,7 +97,7 @@ ThymeleafViewResolver 视图解析器获得视图引擎后来渲染模板
 在使用此注解之后不会再试图走处理器，而是直接将数据写入到输入流中，他的效果等同于通过response对象输出指定格式的数据。  
 @RequestMapping(value="/to_detail2/{goodsId}",produces="text/html")  这类url同样可以缓存页面，不过key需要对应goodsId  
 
-## 对象缓存  
+### 对象缓存  
 缓存秒杀订单对象，不设过期时间    
 同样用redis缓存，下单创建订单后缓存。秒杀判断有无重复秒杀时拿的是缓存里的不是从数据库拿，这样降低了数据库的压力。  
   
@@ -107,7 +107,7 @@ https://blog.csdn.net/lc0817/article/details/52089473
   
 更新时新new一个bean，更新哪个字段加哪个  ？
 
-## 页面静态化
+### 页面静态化
 页面静态化，AngularJS，vue.js，html+ajax  
 在浏览器缓存静态页面，springboot需要配置对静态文件的处理。  
 没有配会想服务器发起一次请求，服务器收到请求确定页面没有改变就返回304让浏览器使用缓存。  
@@ -120,7 +120,7 @@ Cache-Control：浏览器缓存该资源多长时间
 Pragma  
 Expire  
 Cache-Control  
-## 卖超问题
+### 卖超问题
 ```update miaosha_goods set stock_count = stock_count - 1 where goods_id = #{goodsId} and stock_count > 0```  
 数据库会自动加锁确保只有一个线程执行该sql，保证商品不卖超 ?没有更新0条就回滚事务的逻辑啊 改了
   
@@ -131,8 +131,8 @@ js/css压缩（去空格等），减少流量。库一般都有提供压缩版�
 多个js/css组合，减少连接数，三次握手，多个连接会导致刚开网页时很慢  
 Tengine  
 webpack 打包  
-# 服务级优化
-## 接口优化
+## 服务级优化
+### 接口优化
 redis 预减库存，为了减少数据库访问  
 rabbitmq 消息队列，异步处理秒杀请求  
 系统初始化时就要把库存加载到redis中，收到请求，redis预减库存，库存不足，直接返回。  
@@ -163,7 +163,7 @@ swagger
 集成到linux内核中了  
 千万亿级 架构  
 
-# 安全优化
+## 安全优化
 ### 秒杀接口地址隐藏
 防止有人直接刷秒杀接口  
 用户调用一个接口拿到特有的秒杀路径，存redis  
@@ -176,7 +176,7 @@ ScriptEngine
 限制每分钟访问次数  
 接口限流，用缓存记录访问次数并设置有效期  
 通用的限流功能，用拦截器和注解，不用在每个接口方法中都写同样的代码    
-# 其他
+## 其他
 [一张图搞定OAuth2.0](https://www.cnblogs.com/flashsun/p/7424071.html)
 [springboot(十四)：springboot整合shiro-登录认证和权](https://yq.aliyun.com/articles/385516)  
 [HTTP幂等性及GET、POST、PUT、DELETE的区别](https://blog.csdn.net/zjkc050818/article/details/78799386)
